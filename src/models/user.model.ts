@@ -5,6 +5,7 @@ export interface IUser extends Document {
     email: string;
     passwordHash: string;
     status: "UNVERIFIED" | "ACTIVE";
+    role: "USER" | "ADMIN";
 
     verificationCode?: string;
     verificationCodeExpiresAt?: Date;
@@ -32,6 +33,11 @@ const UserSchema = new Schema<IUser>(
             type: String,
             enum: ["UNVERIFIED", "ACTIVE"],
             default: "UNVERIFIED",
+        },
+        role: {
+            type: String,
+            enum: ["USER", "ADMIN"],
+            default: "USER",
         },
 
         verificationCode: {

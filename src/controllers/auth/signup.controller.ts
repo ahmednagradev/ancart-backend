@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import userModel from "../../models/user.model";
 import bcrypt from "bcryptjs";
 import { generateVerificationCode } from "../../utils/generateVerification";
+import { sendVerificationEmail } from "../../services/email.service";
 
 export const signupController = async (req: Request, res: Response) => {
     try {
@@ -44,8 +45,8 @@ export const signupController = async (req: Request, res: Response) => {
             existingUser.verificationCodeExpiresAt = expiry;
 
             user = await existingUser.save();
-        } 
-        
+        }
+
         // 8. Else, create new user
         else {
             user = await userModel.create({
@@ -57,7 +58,11 @@ export const signupController = async (req: Request, res: Response) => {
             })
         }
 
-        // 9. Safe response
+        // 9. Send verification email
+        sendVerificationEmail(user.email, user.verificationCode)
+            .catch(error => console.error("Sending verification email failed:", error));
+
+        // 10. Safe response
         return res.status(201).json({
             message: "Signup successful. Please verify your email.",
             user: {
@@ -69,7 +74,7 @@ export const signupController = async (req: Request, res: Response) => {
         })
 
     } catch (error) {
-        console.error("Signup error: ", error);
+        console.error("Signup error:", error);
         return res.status(500).json({
             message: "Internal server error"
         })

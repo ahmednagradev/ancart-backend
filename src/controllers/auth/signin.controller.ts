@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import userModel from "../../models/user.model";
 import bcrypt from "bcryptjs";
+import { generateAccessToken } from "../../utils/generateToken";
 
 export const signinController = async (req: Request, res: Response) => {
     try {
@@ -40,9 +41,12 @@ export const signinController = async (req: Request, res: Response) => {
             });
         }
 
-        // 5. Success (token later)
+        // 5. Success
+        const token = generateAccessToken({ userId: user._id.toString(), role: user.role });
+
         return res.status(200).json({
             message: "Signin successful",
+            token,
             user: {
                 id: user._id,
                 fullname: user.fullname,
@@ -50,7 +54,7 @@ export const signinController = async (req: Request, res: Response) => {
             },
         });
     } catch (error) {
-        console.error("Signin error: ", error)
+        console.error("Signin error:", error)
         res.status(500).json({
             message: "Internal server error"
         })

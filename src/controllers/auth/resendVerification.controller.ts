@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import userModel from "../../models/user.model";
 import { generateVerificationCode } from "../../utils/generateVerification";
+import { sendVerificationEmail } from "../../services/email.service";
 
 export const resendVerification = async (req: Request, res: Response) => {
     try {
@@ -39,12 +40,16 @@ export const resendVerification = async (req: Request, res: Response) => {
 
         await user.save();
 
+        // 5. Send verification email
+        sendVerificationEmail(user.email, user.verificationCode)
+            .catch(error => console.error("Sending verification email failed:", error));
+
         return res.status(200).json({
             message: "Verification code sent. Check your email."
         })
 
     } catch (error) {
-        console.error("Resend verification error: ", error);
+        console.error("Resend verification error:", error);
         return res.status(500).json({
             message: "Internal server error"
         })
