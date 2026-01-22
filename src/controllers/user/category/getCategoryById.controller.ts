@@ -1,27 +1,25 @@
 import { Request, Response } from "express";
 import categoryModel from "../../../models/category.model";
 
-export const deactivateCategory = async (req: Request, res: Response) => {
+export const getCategoryById = async (req: Request, res: Response) => {
     try {
         const { categoryId } = req.params;
 
         const category = await categoryModel.findById(categoryId);
 
-        if (!category) {
+        if (!category || !category.isActive) {
             return res.status(404).json({
-                message: "Category not found",
-            });
+                message: "Category not found or inactive",
+            })
         }
 
-        category.isActive = false;
-        await category.save();
-
         return res.status(200).json({
-            message: "Category deactivated",
+            success: true,
+            category,
         });
 
     } catch (error) {
-        console.error("Deactivate category (admin) error:", error);
+        console.error("Get category (public) error:", error);
         return res.status(500).json({
             message: "Internal server error",
         });

@@ -5,11 +5,11 @@ import slugify from "slugify";
 
 export const updateCategory = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
+        const { categoryId } = req.params;
         const { name, isActive } = req.body;
 
         // 1. Find category
-        const category = await categoryModel.findById(id);
+        const category = await categoryModel.findById(categoryId);
         if (!category) {
             return res.status(404).json({
                 message: "Category not found",
@@ -22,7 +22,7 @@ export const updateCategory = async (req: Request, res: Response) => {
 
             const existingSlug = await categoryModel.findOne({
                 slug: newSlug,
-                _id: { $ne: new Types.ObjectId(id as string) }
+                _id: { $ne: new Types.ObjectId(categoryId as string) }
             });
 
             if (existingSlug) {

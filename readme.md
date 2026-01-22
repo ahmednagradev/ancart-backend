@@ -46,7 +46,7 @@ This project demonstrates modern backend architecture, secure role-based access,
 - **MongoDB** with **Mongoose**
 - **JWT Authentication**
 - Middleware for role-based access control
-- Email verification using Nodemailer or similar service
+- Email verification using Nodemailer
 
 ---
 
@@ -54,15 +54,15 @@ This project demonstrates modern backend architecture, secure role-based access,
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/project-name.git
-cd project-name
+git clone https://github.com/ahmednagradev/ancart-backend.git
+cd ancart-backend
 
 # Install dependencies
 npm install
 
 # Create a .env file with your environment variables
 # Example:
-# MONGO_URI=your_mongo_connection_string
+# DB_URI=your_mongo_connection_string
 # JWT_SECRET=your_jwt_secret
 # EMAIL_USER=your_email
 # EMAIL_PASS=your_email_password

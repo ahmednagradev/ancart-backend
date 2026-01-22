@@ -3,10 +3,10 @@ import orderModel from "../../../models/order.model";
 
 export const updateOrderStatus = async (req: Request, res: Response) => {
     try {
-        const orderId = req.params;
-        const status = req.body;
+        const { orderId } = req.params;
+        const { status } = req.body;
 
-        const allowedStatuses = ["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"];
+        const allowedStatuses = ["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED"];
 
         if (!allowedStatuses.includes(status)) {
             return res.status(400).json({

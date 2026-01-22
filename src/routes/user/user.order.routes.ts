@@ -6,12 +6,11 @@ import { createOrderFromCart } from "../../controllers/user/order/createOrderFro
 import { cancelOrder } from "../../controllers/user/order/cancelOrder.controller";
 const router = Router();
 
-// Requires authentication
 router.use(authMiddleware);
 
-router.post("/", createOrder);
-router.get("/", getUserOrders);
-router.post("/checkout", createOrderFromCart);
-router.patch("/:orderId/cancel", cancelOrder);
+router.post("/create-order", createOrder);
+router.get("/get-user-orders", getUserOrders);
+router.post("/create-order-from-cart", createOrderFromCart);
+router.patch("/cancel-order/:orderId", cancelOrder);
 
 export default router;

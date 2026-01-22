@@ -11,9 +11,9 @@ const router = Router();
 router.use(authMiddleware);
 router.use(authorizeRoles(["ADMIN"]));
 
-router.get("/", listCategories); // // done
-router.post("/", createCategory); // // done
-router.patch("/:id", updateCategory); // // done
-router.patch("/:id/deactivate", deactivateCategory); // // done
+router.get("/get-all-categories", listCategories); // // done
+router.post("/create-category", createCategory); // // done
+router.patch("/update-category/:categoryId", updateCategory); // // done
+router.patch("/deactivate-category/:categoryId", deactivateCategory); // // done
 
 export default router;

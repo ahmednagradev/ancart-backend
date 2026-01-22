@@ -3,9 +3,9 @@ import productModel from "../../../models/product.model";
 
 export const deactivateProduct = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
+        const { productId } = req.params;
 
-        const product = await productModel.findById(id);
+        const product = await productModel.findById(productId);
 
         if (!product) {
             return res.status(404).json({

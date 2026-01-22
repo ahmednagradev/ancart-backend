@@ -9,9 +9,9 @@ const router = Router();
 
 router.use(authMiddleware);
 
-router.get("/", getCart);
-router.post("/add", addToCart);
-router.delete("/remove/:productId", removeFromCart);
+router.get("/get-cart", getCart);
+router.post("/add-to-cart", addToCart);
+router.delete("/remove-from-cart/:productId", removeFromCart);
 router.post("/clear-cart", clearCart);
 
 export default router;

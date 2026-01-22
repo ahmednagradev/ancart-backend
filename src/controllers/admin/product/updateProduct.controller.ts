@@ -6,11 +6,11 @@ import categoryModel from "../../../models/category.model";
 
 export const updateProduct = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
+        const { productId } = req.params;
         const { name, description, price, stock, categoryId, isActive } = req.body;
 
         // 1. Find product
-        const product = await productModel.findById(id);
+        const product = await productModel.findById(productId);
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
@@ -21,7 +21,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
             const existingSlug = await productModel.findOne({
                 slug: newSlug,
-                _id: { $ne: new Types.ObjectId(id as string) }
+                _id: { $ne: new Types.ObjectId(productId as string) }
             });
 
             if (existingSlug) {

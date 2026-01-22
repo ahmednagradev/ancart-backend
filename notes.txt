@@ -1,8 +1,0 @@
-✔ Secure signup
-✔ Email verification
-✔ Resend verification
-✔ Signin
-✔ JWT access tokens
-✔ Auth middleware
-✔ Role-based authorization
-

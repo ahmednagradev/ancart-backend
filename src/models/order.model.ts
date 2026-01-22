@@ -7,11 +7,22 @@ export interface IOrderItem {
     quantity: number;
 }
 
+export interface IOrderAddress {
+    fullName: string;
+    phone: string;
+    addressLine: string;
+    city: string;
+}
+
 export interface IOrder extends Document {
     user: Types.ObjectId;
     items: IOrderItem[];
+    deliveryAddress: IOrderAddress;
     totalAmount: number;
     status: "PENDING" | "CONFIRMED" | "SHIPPED" | "DELIVERED" | "CANCELLED";
+    cancelledBy: Types.ObjectId;
+    cancelReason: string;
+    cancelledAt: Date;
 }
 
 const orderSchema = new Schema<IOrder>(
@@ -42,6 +53,25 @@ const orderSchema = new Schema<IOrder>(
                 }
             }
         ],
+        deliveryAddress: {
+            fullName: {
+                type: String,
+                required: true,
+                trim: true,
+            },
+            phone: {
+                type: String,
+                required: true,
+            },
+            addressLine: {
+                type: String,
+                required: true,
+            },
+            city: {
+                type: String,
+                required: true,
+            }
+        },
         totalAmount: {
             type: Number,
             required: true,
@@ -50,6 +80,16 @@ const orderSchema = new Schema<IOrder>(
             type: String,
             enum: ["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"],
             default: "PENDING",
+        },
+        cancelledBy: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
+        cancelReason: {
+            type: String,
+        },
+        cancelledAt: {
+            type: Date,
         }
     },
     {

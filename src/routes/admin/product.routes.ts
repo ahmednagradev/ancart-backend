@@ -10,10 +10,10 @@ const router = Router();
 
 router.use(authMiddleware);
 router.use(authorizeRoles(["ADMIN"]));
- 
-router.get("/", listProducts); // // done
-router.post("/", createProduct); // // done
-router.patch("/:id", updateProduct); // // done
-router.patch("/:id/deactivate", deactivateProduct); // // done
+
+router.get("/get-all-products", listProducts); // // done
+router.post("/create-product", createProduct); // // done
+router.patch("/update-product/:productId", updateProduct); // // done
+router.patch("/deactivate-product/:productId", deactivateProduct); // // done
 
 export default router;
