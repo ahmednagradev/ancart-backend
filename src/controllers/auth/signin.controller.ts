@@ -44,9 +44,15 @@ export const signinController = async (req: Request, res: Response) => {
         // 5. Success
         const token = generateAccessToken({ userId: user._id.toString(), role: user.role });
 
-        return res.status(200).json({
+        return res
+        .status(200)
+        .cookie("accessToken", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+        })
+        .json({
             message: "Signin successful",
-            token,
             user: {
                 id: user._id,
                 fullname: user.fullname,

@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth/auth.routes";
 import adminProductRoutes from "./routes/admin/product.routes";
 import adminCategoryRoutes from "./routes/admin/category.routes";
@@ -11,6 +12,8 @@ import userCartRoutes from "./routes/user/user.cart.routes";
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Auth routes
 app.use("/api/auth", authRoutes);

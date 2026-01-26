@@ -8,16 +8,14 @@ interface JwtPayload {
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const authHeader = req.headers.authorization;
+        const token = req.cookies.accessToken;
 
         // 1. Token presence check
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        if (!token) {
             return res.status(401).json({
                 message: "Authentication required"
             });
         }
-
-        const token = authHeader.split(" ")[1];
 
         // 2. Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
@@ -41,3 +39,13 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 // app.get("/api/profile", authMiddleware, (req, res) => {
 //    res.json({ message: "Protected route" })
 // })
+
+
+// Previous code:
+// const authHeader = req.headers.authorization;
+// if (!authHeader || !authHeader.startsWith("Bearer ")) {
+//     return res.status(401).json({
+//         message: "Authentication required"
+//     });
+// }
+// const token = authHeader.split(" ")[1];
