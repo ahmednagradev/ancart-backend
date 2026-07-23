@@ -20,15 +20,16 @@ export const cancelOrder = async (req: Request, res: Response) => {
         }
 
         if (order.status === "CANCELLED") {
-            throw new Error("Order already cancelled");
+            throw new Error("Order is already cancelled");
         }
 
-        // Only allow cancellation if payment method is COD and status is pending or confirmed
-        const allowedStatuses = [];
-
-        if (order.orderData.paymentMethod === "COD") {
-            allowedStatuses.push("CONFIRMED", "PENDING");
-        }
+        // Cancellation rules:
+        // COD    -> PENDING, CONFIRMED
+        // Online -> PENDING only
+        const allowedStatuses: string[] =
+            order.orderData.paymentMethod === "COD"
+                ? ["PENDING", "CONFIRMED"]
+                : ["PENDING"];
 
         if (!allowedStatuses.includes(order.status)) {
             throw new Error("Cannot cancel this order");
@@ -39,7 +40,7 @@ export const cancelOrder = async (req: Request, res: Response) => {
             await productModel.updateOne(
                 { _id: item.product },
                 { $inc: { stock: item.quantity } },
-                { session },
+                { session }
             );
         }
 
@@ -48,21 +49,23 @@ export const cancelOrder = async (req: Request, res: Response) => {
 
         await session.commitTransaction();
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
-            message: "Order cancelled",
+            message: "Order cancelled successfully",
             data: order,
         });
-
     } catch (error) {
         await session.abortTransaction();
 
         console.error("Cancel order (user) error:", error);
 
         return res.status(400).json({
-            message: error instanceof Error ? error.message : "Order cancellation failed",
+            success: false,
+            message:
+                error instanceof Error
+                    ? error.message
+                    : "Order cancellation failed",
         });
-
     } finally {
         session.endSession();
     }
